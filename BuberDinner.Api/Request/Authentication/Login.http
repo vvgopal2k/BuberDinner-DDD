@@ -1,0 +1,11 @@
+# For more info on HTTP files go to https://aka.ms/vs/httpfile
+# For more info on HTTP files go to https://aka.ms/vs/httpfile
+@host=https://localhost:7143
+
+POST {{host}}/auth/login
+Content-Type: application/json
+
+{  
+  "email": "venu.vutukuru@gmail.com",
+  "password":"venu1234%"
+}
