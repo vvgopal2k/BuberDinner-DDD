@@ -8,6 +8,11 @@
     <UserSecretsId>3c1fa642-d335-45cf-88a5-d6579489569a</UserSecretsId>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Mapster" Version="7.4.0" />
+    <PackageReference Include="Mapster.DependencyInjection" Version="1.0.1" />
+  </ItemGroup>
+
 
   <ItemGroup>
     <ProjectReference Include="..\BuberDinner.Contracts\BuberDinner.Contracts.csproj" />
