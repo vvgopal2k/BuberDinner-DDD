@@ -1,4 +1,6 @@
-﻿using BuberDinner.Application.Authentication;
+﻿using BuberDinner.Application.Authentication.Commands;
+using BuberDinner.Application.Authentication.Common;
+using BuberDinner.Application.Authentication.Queries;
 using BuberDinner.Application.Common.Errors;
 using BuberDinner.Contracts.Authentication;
 using BuberDinner.Domain.Common.Errors;
@@ -11,16 +13,18 @@ namespace BuberDinner.Api.Controllers
     //[ErrorHandlingFilter] for all controllers add it in program file
     public class AuthenticationController : ApiController
     {
-        private readonly IAuthenticationService _authenticationService;
+        private readonly IAuthenticationCommandService _authenticationCommandService;
+        private readonly IAuthenticationQueryService _authenticationQueryService;
 
-        public AuthenticationController(IAuthenticationService authenticationService)
+        public AuthenticationController(IAuthenticationCommandService authenticationCommandService, IAuthenticationQueryService authenticationQueryService)
         {
-            _authenticationService = authenticationService;
+            _authenticationCommandService = authenticationCommandService;
+            _authenticationQueryService = authenticationQueryService;
         }
         [HttpPost("register")]
         public IActionResult Register(RegisterRequest request)
         {
-           ErrorOr<AuthenticationResult> authResult = _authenticationService.Register(request.FirstName,request.LastName,request.Email,request.Password);
+           ErrorOr<AuthenticationResult> authResult = _authenticationCommandService.Register(request.FirstName,request.LastName,request.Email,request.Password);
             return authResult.Match(authResul => Ok(MapAuthResult(authResul)), errors => Problem(errors));
 
         }
@@ -33,7 +37,7 @@ namespace BuberDinner.Api.Controllers
         [HttpPost("login")]
         public IActionResult Login(LoginRequest request)
         {
-            var authResult = _authenticationService.Login(request.Email, request.Password);
+            var authResult = _authenticationQueryService.Login(request.Email, request.Password);
             if(authResult.IsError && authResult.FirstError == Errors.Authentication.InvalidCredentials)
             {
                 return Problem(statusCode: StatusCodes.Status401Unauthorized,
